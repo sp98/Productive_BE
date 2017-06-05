@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from . import serializers
 from . import models
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -36,8 +37,20 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
     serializer_class = serializers.Daily_Task_Serializer
 
     def get_queryset(self):
-        return self.queryset.filter(users_id=self.kwargs.get('user_id'))
+        return self.queryset.filter(user_id=self.kwargs.get('user_id'))
+
+   # Right when the object is created by the view:
+    def perform_create(self, serializer):
+        user = get_object_or_404(models.Users, pk=self.kwargs.get('user_id'))
+        serializer.save(user=user)
 
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Daily_Tasks.objects.all()
     serializer_class = serializers.Daily_Task_Serializer
+
+    def get_object(self):
+        return get_object_or_404(
+        self.get_queryset(),
+        user_id=self.kwargs.get('user_id'),
+        pk= self.kwargs.get('pk')
+        )
