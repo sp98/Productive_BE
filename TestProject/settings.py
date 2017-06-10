@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +61,7 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
 )
 
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
 
 
 TEMPLATES = [
@@ -130,16 +132,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Rest Framework
+AUTH_USER_MODEL = 'testing.Users'
+
+# Rest Framework dict
 REST_FRAMEWORK = {
   # Django identifies if its User A or User B etc.
  'DEFAULT_AUTHENTICATION_CLASSES' : (
-    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.TokenAuthentication',
 
   ),
 
   # Django identifies if User A can do some stuff or not.
  'DEFAULT_PERMISSION_CLASSES' : (
-    'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    'rest_framework.permissions.IsAuthenticated',
     )
 }
