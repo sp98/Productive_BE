@@ -22,12 +22,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 # List all the users
 # Class based API Views.
-class ListUsers(APIView):
-    def get(self, request, format=None):
-        users = models.Users.objects.all()
-        serializer = serializers.User_Serializer(users, many=True)
-        print(serializer.data)
-        return Response(serializer.data)
 
 class CreateUser(APIView):
     permission_classes = (AllowAny,)
@@ -51,7 +45,7 @@ class validateUserName(APIView):
 # Generic Views.
 # ListCreateAPIView helps to list and Create API Views.
 class ListUsers(generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     queryset = models.Users.objects.all()
     serializer_class = serializers.User_Serializer
 
@@ -83,10 +77,12 @@ class logoutUser(APIView):
         return Response("Logged Out successfully");
 
 class RetrieveUpdateDestroyUsers(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (AllowAny,)
     queryset = models.Users.objects.all()
     serializer_class = serializers.User_Serializer
 
 class ListCreateDailyTasks(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()
     serializer_class = serializers.Daily_Task_Serializer
 
@@ -99,6 +95,7 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
         serializer.save(user=user)
 
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()
     serializer_class = serializers.Daily_Task_Serializer
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from rest_framework.permissions import IsAuthenticated
+from django.utils import timezone
 
 from datetime import datetime
 
@@ -22,7 +23,8 @@ class Daily_Tasks(models.Model):
     taskStatus = models.CharField(max_length=230)
     user = models.ForeignKey(Users, on_delete=models.CASCADE, default='')
     taskCadence = models.CharField(max_length=20)
-    date = models.DateTimeField(default=datetime.now().date())
+    date = models.DateField(default=timezone.now)
+    time = models.TimeField(default=timezone.now)
 
     def __str__(self):
         return self.taskName
