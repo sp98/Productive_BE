@@ -94,6 +94,9 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
         user = get_object_or_404(models.Users, pk=self.kwargs.get('user_id'))
         serializer.save(user=user)
 
+class fetchTasks(APIView):
+    def get(self, request, format=None):
+        print(request.user)
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()

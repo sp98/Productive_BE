@@ -19,12 +19,11 @@ class Users(AbstractUser):
 class Daily_Tasks(models.Model):
     permission_classes = (IsAuthenticated,)
     taskName = models.CharField(max_length=230)
-    taskDescription = models.TextField()
-    taskStatus = models.CharField(max_length=230)
+    taskDescription = models.TextField(default='')
+    taskStatus = models.CharField(max_length=10, default='pending')
     user = models.ForeignKey(Users, on_delete=models.CASCADE, default='')
     taskCadence = models.CharField(max_length=20)
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    taskDate = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.taskName
