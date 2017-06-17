@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^tasks/$', views.CreateFetchDeleteUpdateTasks.as_view(), name='tasks'),
     url(r'^user/(?P<pk>\d+)/$', views.RetrieveUpdateDestroyUsers.as_view(), name='user_detail'),
     url(r'^(?P<user_id>\d+)/daily/$', views.ListCreateDailyTasks.as_view(), name='daily_tasks'),
+    #url(r'^(?P<user_id>\d+)/daily/(?P<pk>\d+)$', views.RetrieveUpdateDestroyDailyTasks.as_view(), name='daily_task_detail'),
     url(r'^(?P<user_id>\d+)/daily/(?P<pk>\d+)$', views.RetrieveUpdateDestroyDailyTasks.as_view(), name='daily_task_detail'),
 ]

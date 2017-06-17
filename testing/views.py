@@ -96,11 +96,16 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
         serializer.save(user=user)
 
 class fetchTasks(APIView):
+<<<<<<< HEAD
     def post(self, request, format=None):
         tasks =models.Daily_Tasks.objects.all().filter(user=request.user, taskCadence=request.data.get('cadence'), taskDate=request.data.get('date'))
         serializer = serializers.Daily_Task_Serializer(tasks, many=True)
         return Response(serializer.data)
 
+=======
+    def get(self, request, format=None):
+        print(request.user)
+>>>>>>> 185861c6f25c2b49bc9daab236340b925e892cd1
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()
