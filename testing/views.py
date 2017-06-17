@@ -1,4 +1,4 @@
-
+import json
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -8,6 +8,7 @@ from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.http import Http404
 
 from . import serializers
 from . import models
@@ -60,7 +61,7 @@ class loginUser(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         user = models.Users.objects.all().filter(email=email, password=password)
-        print(user[0].id)
+        #print(user[0].id)
         if user.count() > 0:
             print(user[0])
             token, created = Token.objects.get_or_create(user=user[0])
@@ -94,6 +95,12 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
         user = get_object_or_404(models.Users, pk=self.kwargs.get('user_id'))
         serializer.save(user=user)
 
+class fetchTasks(APIView):
+    def post(self, request, format=None):
+        tasks =models.Daily_Tasks.objects.all().filter(user=request.user, taskCadence=request.data.get('cadence'), taskDate=request.data.get('date'))
+        serializer = serializers.Daily_Task_Serializer(tasks, many=True)
+        return Response(serializer.data)
+
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()
@@ -105,3 +112,34 @@ class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
         user_id=self.kwargs.get('user_id'),
         pk= self.kwargs.get('pk')
         )
+
+class CreateFetchDeleteUpdateTasks(APIView):
+
+    def post(self, request, format=None):
+        task = request.data
+        task['user'] = request.user  # adding user to the task dict
+        models.Daily_Tasks(**task).save() #saving the new task
+        print(task.get('taskCadence'))
+        updated_tasks = models.Daily_Tasks.objects.all().filter(user=request.user,
+                                taskCadence=task.get('taskCadence'), taskDate=task.get('taskDate'))
+        serializer = serializers.Daily_Task_Serializer(updated_tasks, many=True)
+        return Response(serializer.data)
+
+    def get(self, request, format=None):
+        print(request.GET)
+        return Response('hi get')
+    def put(self, request, format=None):
+        return Repsonse('hi put')
+    def delete(self, request, format=None):
+        print(request.data);
+        for task in request.data:
+            print(task.get('id'))
+            to_be_deleted = models.Daily_Tasks.objects.all().filter(user=request.user, id=task.get('id'))
+            if not to_be_deleted:
+                return Http404('Task Not found')
+            else:
+                to_be_deleted.delete();
+        updated_tasks = models.Daily_Tasks.objects.all().filter(user=request.user,
+                                taskCadence=task.get('taskCadence'), taskDate=task.get('taskDate'))
+        serializer = serializers.Daily_Task_Serializer(updated_tasks, many=True)
+        return Response(serializer.data)

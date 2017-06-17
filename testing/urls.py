@@ -8,8 +8,9 @@ urlpatterns = [
     url(r'^login/', views.loginUser.as_view(), name='login'),
     url(r'^logout/', views.logoutUser.as_view(), name='logout'),
     url(r'^sign_up/$', views.SignUpUsers.as_view(), name='sign_up'),
+    url(r'^fetch_tasks/$', views.fetchTasks.as_view(), name='fetch_tasks'),
+    url(r'^tasks/$', views.CreateFetchDeleteUpdateTasks.as_view(), name='tasks'),
     url(r'^user/(?P<pk>\d+)/$', views.RetrieveUpdateDestroyUsers.as_view(), name='user_detail'),
     url(r'^(?P<user_id>\d+)/daily/$', views.ListCreateDailyTasks.as_view(), name='daily_tasks'),
     url(r'^(?P<user_id>\d+)/daily/(?P<pk>\d+)$', views.RetrieveUpdateDestroyDailyTasks.as_view(), name='daily_task_detail'),
-
 ]

@@ -9,7 +9,7 @@ class User_Serializer(serializers.ModelSerializer):
 class Daily_Task_Serializer(serializers.ModelSerializer):
     class Meta:
         model=models.Daily_Tasks
-        fields=('id', 'taskName', 'taskDescription', 'taskStatus', 'user', 'date', 'time', 'taskCadence')
+        fields=('id', 'taskName', 'taskDescription', 'taskStatus', 'user', 'taskDate', 'taskCadence')
 
 class Weekly_Task_Serializer(serializers.ModelSerializer):
     class Meta:
