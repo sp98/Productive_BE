@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import Http404
+from django.contrib.auth import authenticate
 
 from . import serializers
 from . import models
@@ -60,6 +61,8 @@ class loginUser(APIView):
     def post(self, request, format=None):
         email = request.data.get('email')
         password = request.data.get('password')
+        print(email)
+        print(password)
         user = models.Users.objects.all().filter(email=email, password=password)
         #print(user[0].id)
         if user.count() > 0:
@@ -68,7 +71,8 @@ class loginUser(APIView):
             print(token.key)
             return Response({'token': token.key , 'user_id': user[0].id } )
         else:
-            return Response("Not a valid email or password")
+            return Response("Invalid email or password")
+
 
 class logoutUser(APIView):
     def post(self, request, format=None):
@@ -96,16 +100,14 @@ class ListCreateDailyTasks(generics.ListCreateAPIView):
         serializer.save(user=user)
 
 class fetchTasks(APIView):
-<<<<<<< HEAD
     def post(self, request, format=None):
         tasks =models.Daily_Tasks.objects.all().filter(user=request.user, taskCadence=request.data.get('cadence'), taskDate=request.data.get('date'))
         serializer = serializers.Daily_Task_Serializer(tasks, many=True)
         return Response(serializer.data)
 
-=======
     def get(self, request, format=None):
         print(request.user)
->>>>>>> 185861c6f25c2b49bc9daab236340b925e892cd1
+
 class RetrieveUpdateDestroyDailyTasks(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (AllowAny,)
     queryset = models.Daily_Tasks.objects.all()
