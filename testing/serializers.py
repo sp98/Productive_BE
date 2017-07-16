@@ -4,7 +4,7 @@ from . import models
 class User_Serializer(serializers.ModelSerializer):
     class Meta:
         model=models.Users
-        fields=('id', 'email', 'username', 'token')
+        fields=('id', 'email', 'username', 'password')
 
 class Daily_Task_Serializer(serializers.ModelSerializer):
     class Meta:
